@@ -1,25 +1,52 @@
-import logo from './logo.svg';
+import React from 'react';
+import axios from 'axios'
 import './App.css';
+import Card from 'react-bootstrap/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchQuery: '',
+      locationData: {}
+    }
+  }
+
+  getLocationData = async () => {
+    const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_API_KEY}&q=${this.state.searchQuery}&format=json`
+    const response = await axios.get(API);
+    this.setState({locationData: response.data[0]})
+    console.log(this.state.locationData);
+  }
+
+  getSearchQuery = (e) => {
+    this.setState({
+      searchQuery: e.target.value
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="text" placeholder="type city here..." onChange={this.getSearchQuery}></input>
+        <button onClick={this.getLocationData}>Explore!</button>
+
+        <Card style={{ width: '18rem' }}>
+          {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+          <Card.Body>
+            <Card.Title>Location: {this.state.locationData.display_name}</Card.Title>
+            <Card.Text>
+            <p>Latitude: {this.state.locationData.lat}</p>
+            <p>Longitude: {this.state.locationData.lon}</p>
+            </Card.Text>
+            {/* <Button variant="primary">Go somewhere</Button> */}
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  }
+  
 }
 
 export default App;
