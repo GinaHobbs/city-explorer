@@ -9,7 +9,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       searchQuery: '',
-      locationData: {}
+      locationData: {},
+      latitude: '',
+      longitude: '',
+      map: {}
     }
   }
 
@@ -18,6 +21,10 @@ class App extends React.Component {
     const response = await axios.get(API);
     this.setState({locationData: response.data[0]})
     console.log(this.state.locationData);
+    this.setState({latitude: this.state.locationData.lat})
+    this.setState({longitude: this.state.locationData.lon})
+    let url = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_API_KEY}&center=${this.state.latitude},${this.state.longitude}&zoom=18`
+    this.setState({map: url})
   }
 
   getSearchQuery = (e) => {
@@ -31,9 +38,8 @@ class App extends React.Component {
       <div>
         <input type="text" placeholder="type city here..." onChange={this.getSearchQuery}></input>
         <button onClick={this.getLocationData}>Explore!</button>
-
         <Card style={{ width: '18rem' }}>
-          {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+          <Card.Img variant="top" src={this.state.map} />
           <Card.Body>
             <Card.Title>Location: {this.state.locationData.display_name}</Card.Title>
             <Card.Text>
