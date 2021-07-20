@@ -3,6 +3,7 @@ import axios from 'axios'
 import './App.css';
 import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
 
 class App extends React.Component {
   constructor(props) {
