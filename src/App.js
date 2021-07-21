@@ -13,7 +13,8 @@ class App extends React.Component {
       locationData: {},
       latitude: '',
       longitude: '',
-      map: {}
+      map: {},
+      weather: {}
     }
   }
 
@@ -27,10 +28,18 @@ class App extends React.Component {
       this.setState({longitude: this.state.locationData.lon})
       let url = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_API_KEY}&center=${this.state.latitude},${this.state.longitude}&zoom=18`
       this.setState({map: url})
+      this.getWeatherData();
+      console.log(this.state.weather);
     }
     catch (e) {
       alert(e.message)
     }
+  }
+
+  getWeatherData = async () => {
+    const API = 'https://localhost/3333';
+    const weather = await axios.get(`${API}/weather`);
+    this.setState({weather: weather.data})
   }
 
   getSearchQuery = (e) => {
@@ -51,6 +60,8 @@ class App extends React.Component {
             <Card.Text>
             <p>Latitude: {this.state.locationData.lat}</p>
             <p>Longitude: {this.state.locationData.lon}</p>
+            <p>Weather Date: {this.state.weather.datetime}</p>
+            <p>Weather Description: {this.state.weather.description}</p>
             </Card.Text>
             {/* <Button variant="primary">Go somewhere</Button> */}
           </Card.Body>
