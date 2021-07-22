@@ -14,7 +14,8 @@ class App extends React.Component {
       latitude: '',
       longitude: '',
       map: {},
-      weather: []
+      weather: [],
+      movies: []
     }
   }
 
@@ -28,7 +29,7 @@ class App extends React.Component {
       let url = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_API_KEY}&center=${this.state.latitude},${this.state.longitude}&zoom=18`
       this.setState({map: url})
       this.getWeatherData();
-      // console.log(this.state.weather)
+      this.getMovieData();
     }
     catch (e) {
       alert(e.message)
@@ -39,7 +40,14 @@ class App extends React.Component {
     const API = 'http://localhost:3333';
     const weatherData = await axios.get(`${API}/weather?lat=${this.state.latitude}&lon=${this.state.longitude}`);
     this.setState({weather: weatherData.data})
-    console.log(weatherData)
+    // console.log(weatherData)
+  }
+
+  getMovieData = async () => {
+    const API = 'http://localhost:3333';
+    const movieData = await axios.get(`${API}/movies?query=${this.state.searchQuery}`)
+    this.setState({movies: movieData.data})
+    console.log(movieData.data)
   }
 
   getSearchQuery = (e) => {
@@ -66,6 +74,8 @@ class App extends React.Component {
             {/* <Button variant="primary">Go somewhere</Button> */}
           </Card.Body>
         </Card>
+        <p>{this.state.movies.length?this.state.movies[0].title:null}</p>
+        <p>{this.state.movies.length?this.state.movies[0].description:null}</p>
       </div>
     );
   }
