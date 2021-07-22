@@ -39,17 +39,19 @@ class App extends React.Component {
   }
 
   getWeatherData = async () => {
-    const API = 'http://localhost:3333';
+    // const API = 'http://localhost:3333';
+    const API = `https://city-explorer-api-ginahobbs.herokuapp.com/`
     const weatherData = await axios.get(`${API}/weather?lat=${this.state.latitude}&lon=${this.state.longitude}`);
     this.setState({weather: weatherData.data})
     // console.log(weatherData)
   }
 
   getMovieData = async () => {
-    const API = 'http://localhost:3333';
+    // const API = 'http://localhost:3333';
+    const API = `https://city-explorer-api-ginahobbs.herokuapp.com/`
     const movieData = await axios.get(`${API}/movies?searchQuery=${this.state.searchQuery}`)
     this.setState({movies: movieData.data})
-    console.log(movieData.data)
+    // console.log(movieData.data)
   }
 
   getSearchQuery = (e) => {
