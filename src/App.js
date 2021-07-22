@@ -14,7 +14,7 @@ class App extends React.Component {
       latitude: '',
       longitude: '',
       map: {},
-      weather: {}
+      weather: []
     }
   }
 
@@ -23,13 +23,12 @@ class App extends React.Component {
       const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_API_KEY}&q=${this.state.searchQuery}&format=json`
       const response = await axios.get(API);
       this.setState({locationData: response.data[0]})
-      console.log(this.state.locationData);
       this.setState({latitude: this.state.locationData.lat})
       this.setState({longitude: this.state.locationData.lon})
       let url = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_API_KEY}&center=${this.state.latitude},${this.state.longitude}&zoom=18`
       this.setState({map: url})
       this.getWeatherData();
-      console.log(this.state.weather);
+      // console.log(this.state.weather)
     }
     catch (e) {
       alert(e.message)
@@ -38,8 +37,9 @@ class App extends React.Component {
 
   getWeatherData = async () => {
     const API = 'http://localhost:3333';
-    const weather = await axios.get(`${API}/weather`);
-    this.setState({weather: weather.data})
+    const weatherData = await axios.get(`${API}/weather?lat=${this.state.latitude}&lon=${this.state.longitude}`);
+    this.setState({weather: weatherData.data})
+    console.log(weatherData)
   }
 
   getSearchQuery = (e) => {
@@ -60,8 +60,8 @@ class App extends React.Component {
             <Card.Text>
             <p>Latitude: {this.state.locationData.lat}</p>
             <p>Longitude: {this.state.locationData.lon}</p>
-            <p>Weather Date: {this.state.weather.datetime}</p>
-            <p>Weather Description: {this.state.weather.description}</p>
+            <p>Weather Date: {this.state.weather.length?this.state.weather[0].date:null}</p>
+            <p>Weather Description: {this.state.weather.length?this.state.weather[0].description:null}</p>
             </Card.Text>
             {/* <Button variant="primary">Go somewhere</Button> */}
           </Card.Body>
