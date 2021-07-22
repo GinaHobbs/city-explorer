@@ -4,6 +4,8 @@ import './App.css';
 import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import RenderMovie from './RenderMovie.js'
+import RenderWeather from './RenderWeather.js'
 
 class App extends React.Component {
   constructor(props) {
@@ -45,7 +47,7 @@ class App extends React.Component {
 
   getMovieData = async () => {
     const API = 'http://localhost:3333';
-    const movieData = await axios.get(`${API}/movies?query=${this.state.searchQuery}`)
+    const movieData = await axios.get(`${API}/movies?searchQuery=${this.state.searchQuery}`)
     this.setState({movies: movieData.data})
     console.log(movieData.data)
   }
@@ -71,11 +73,10 @@ class App extends React.Component {
             <p>Weather Date: {this.state.weather.length?this.state.weather[0].date:null}</p>
             <p>Weather Description: {this.state.weather.length?this.state.weather[0].description:null}</p>
             </Card.Text>
-            {/* <Button variant="primary">Go somewhere</Button> */}
           </Card.Body>
         </Card>
-        <p>{this.state.movies.length?this.state.movies[0].title:null}</p>
-        <p>{this.state.movies.length?this.state.movies[0].description:null}</p>
+        <RenderWeather weatherData={this.state.weather} />
+        <RenderMovie movieData={this.state.movies} />
       </div>
     );
   }
